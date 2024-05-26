@@ -5,7 +5,7 @@ Este projeto visa desenvolver um sistema de gerenciamento de estoque na nuvem AW
 A solução proposta garantirá uma gestão eficiente e centralizada dos estoques, proporcionando visibilidade em tempo real, escalabilidade, segurança e alta disponibilidade.
 
 #### Arquitetura da Solução
-![](https://github.com/DavidSLeite/prova_puc_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/desenho_solucao.png?raw=true)
+![](https://github.com/DavidSLeite/puc_prova_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/desenho_solucao.png?raw=true)
 
 #### 1 - Camada de Aplicação
 
@@ -73,15 +73,15 @@ O código de ingestão e consulta que serão adicinados ao AWS Lambda estarão c
 
 1° Passo: Criação das filas SQS
 
-![](https://github.com/DavidSLeite/prova_puc_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/sqs.png?raw=true)
+![](https://github.com/DavidSLeite/puc_prova_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/sqs.png?raw=true)
 
 2° Passo: Criação das AWS Lambda Function
 
-![](https://github.com/DavidSLeite/prova_puc_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/lista_lambda.png?raw=true)
+![](https://github.com/DavidSLeite/puc_prova_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/lista_lambda.png?raw=true)
 
 Importantente realizar o vinculo entre a fila **mercado-puc-queue-estoque** e o lambda **lambda-upsert-posicao-estoque**, sendo que a cada evento inserido na fila será triggado o lambda que por sua vez irá se integrar com o DynamoDB.
 
-![](https://github.com/DavidSLeite/prova_puc_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/lambda_upsert.png?raw=true)
+![](https://github.com/DavidSLeite/puc_prova_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/lambda_upsert.png?raw=true)
 
 Os códigos que foram utilizados nos lambdas estão contidos neste repositório.
 
@@ -93,13 +93,13 @@ Os códigos que foram utilizados nos lambdas estão contidos neste repositório.
 
 Criação da tabela com PartitionKey e SortKey
 
-![](https://github.com/DavidSLeite/prova_puc_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/create_dy_pt1.png?raw=true)
+![](https://github.com/DavidSLeite/puc_prova_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/create_dy_pt1.png?raw=true)
 
 Configuração do provisionamento da tabela, a tabela irá usar 5 DPUs para leitura e 5 DPUs para escrita.
 
 O provisionamento de Auto Scaling estará ativo com no mínimo 5 DPUs e no máximo 10 DPUs para ambos (Leitura/Escrita), podendo a qualquer momento ser ajustado conforme a necessidade.
 
-![](https://github.com/DavidSLeite/prova_puc_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/create_dy_pt2.png?raw=true)
+![](https://github.com/DavidSLeite/puc_prova_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/create_dy_pt2.png?raw=true)
 
 Um DPU (DynamoDB Processing Unit) é uma unidade de medida utilizada pelo DynamoDB para definir a capacidade de processamento e o consumo de recursos em operações de leitura e escrita em tabelas.
 
@@ -107,9 +107,9 @@ Entender DPUs ajuda a gerenciar custos e desempenho ao usar o DynamoDB, seja em 
 
 ### Custo estimado
 
-![](https://github.com/DavidSLeite/prova_puc_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/create_dy_pt3.png?raw=true)
+![](https://github.com/DavidSLeite/puc_prova_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/create_dy_pt3.png?raw=true)
 
-![](https://github.com/DavidSLeite/prova_puc_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/create_dy_pt3_custos.png?raw=true)
+![](https://github.com/DavidSLeite/puc_prova_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/create_dy_pt3_custos.png?raw=true)
 
 ### Teste de carga
 
@@ -119,13 +119,13 @@ Para isso foi utilizado o script python ```artefatos/app_carga_estoque/app.py```
 
 e para uso do mesmo será necessário a instalação e configuração do ```AWS CLI``` em sua maquina local e instalação da lib boto3 com pip, outra opção é postar uma mensagem direto na fila SQS pelo console AWS.
 
-![](https://github.com/DavidSLeite/prova_puc_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/carga.png?raw=true)
+![](https://github.com/DavidSLeite/puc_prova_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/carga.png?raw=true)
 
-![](https://github.com/DavidSLeite/prova_puc_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/itens_dynamodb.png?raw=true)
+![](https://github.com/DavidSLeite/puc_prova_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/itens_dynamodb.png?raw=true)
 
 O DynamoDB é um banco de dados que responde requisições em baixa latência, é possível acompanhar isso nos logs do lambda ```lambda-upsert-posicao-estoque``` pois para realizar o upsert, esse lambda primeiro requisita o item na base do dynamodb, caso o item exista ele atualiza o registro senão ele insere o mesmo no dynamodb.
 
-![](https://github.com/DavidSLeite/prova_puc_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/latencia_dynamo.png?raw=true)
+![](https://github.com/DavidSLeite/puc_prova_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/latencia_dynamo.png?raw=true)
 
 Agora com os itens carregados na tabela podemos fazer query no DynamoDB através do lambda ```lambda-query-posicao-estoque```, para esse teste fizemos a consulta diretamente no console do aws lambda.
 
@@ -144,7 +144,7 @@ Payload Query
 
 Saída:
 
-![](https://github.com/DavidSLeite/prova_puc_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/lambda_query.png?raw=true)
+![](https://github.com/DavidSLeite/puc_prova_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/lambda_query.png?raw=true)
 
 Payload Scan
 
@@ -157,7 +157,7 @@ Payload Scan
 
 Saída:
 
-![](https://github.com/DavidSLeite/prova_puc_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/lambda_scan.png?raw=true)
+![](https://github.com/DavidSLeite/puc_prova_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/lambda_scan.png?raw=true)
 
 Em um caso real quando o API Gateway receber uma requisição POST com o payload de "Query" ou "Scan", a aplicação receberá um json como resposta:
 
