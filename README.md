@@ -161,8 +161,6 @@ Saída:
 
 Em um caso real quando o API Gateway receber uma requisição POST com o payload de "Query" ou "Scan", a aplicação receberá um json como resposta:
 
-Resposta Scan
-
 Resposta Query
 
 ```
@@ -178,6 +176,8 @@ Resposta Query
   }
 }
 ```
+
+Resposta Scan
 
 ```
 {
