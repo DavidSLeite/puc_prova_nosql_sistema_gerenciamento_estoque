@@ -1,6 +1,4 @@
-
 from datetime import datetime
-import json
 import boto3
 import time
 from decimal import Decimal
@@ -11,8 +9,8 @@ def lambda_handler(event, context):
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('tb_posicao_estoque_filial')
 
-    partitionKey = event.get('codigo_partitionkey')
-    sortKey = event.get('codigo_sortkey')
+    partitionKey = event.get('codigo_barra')
+    sortKey = event.get('filial')
     query_type = event.get('query_type')
     qtd_itens = event.get('quantidade_itens')
 
@@ -30,7 +28,11 @@ def lambda_handler(event, context):
         for item in response['Items']:
             lista_item.append(item['posicao_estoque'])
 
-        return lista_item
+        return {
+            'status_code': 200,
+            'Message': 'SUCCESS',
+            'Itens': lista_item
+        }
     
     def query_dynamo(partitionKey, sortKey) -> dict:
 
@@ -41,7 +43,11 @@ def lambda_handler(event, context):
         else:
             response = {}
 
-        return response
+        return {
+            'status_code': 200,
+            'Message': 'SUCCESS',
+            'Item': response
+        }
     
     if query_type == 'query':
         inicio = time.time()
@@ -56,8 +62,4 @@ def lambda_handler(event, context):
         latencia = fim - inicio
         print(f"Query Scan top {qtd_itens} Latencia - {round(latencia, 4)}ms")
     
-    return {
-        'status_code': 200,
-        'Message': 'SUCCESS',
-        'Item': json.dumps(response, default=decimal_default, ensure_ascii=False)
-    }
+    return response

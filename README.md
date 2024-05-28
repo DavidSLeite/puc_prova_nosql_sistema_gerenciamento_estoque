@@ -115,9 +115,9 @@ Entender DPUs ajuda a gerenciar custos e desempenho ao usar o DynamoDB, seja em 
 
 Iremos fazer um teste de carga para evidênciar a latência na inserção ou consultas de registros no DynamoDB.
 
-Para isso foi utilizado o script python ```artefatos/app_carga_estoque/app.py``` que envia menssagens em batch para a fila SQS
+Para isso foi utilizado o script python ```artefatos/app_carga_estoque/app.py``` que envia menssagens em batch para a fila SQS, e para uso do mesmo será necessário a instalação e configuração do ```AWS CLI``` em sua maquina local e instalação da lib boto3 com pip do python.
 
-e para uso do mesmo será necessário a instalação e configuração do ```AWS CLI``` em sua maquina local e instalação da lib boto3 com pip, outra opção é postar uma mensagem direto na fila SQS pelo console AWS.
+Outra opção é postar uma mensagem direto na fila SQS pelo console AWS.
 
 ![](https://github.com/DavidSLeite/puc_prova_nosql_sistema_gerenciamento_estoque/blob/main/artefatos/images/carga.png?raw=true)
 
@@ -136,8 +136,8 @@ Payload Query
 
 ```
 {
-  "codigo_partitionkey": "5140642011605",
-  "codigo_sortkey": "1001",
+  "codigo_barra": "5140642011605",
+  "filial": "1001",
   "query_type": "query"
 }
 ```
@@ -163,23 +163,66 @@ Em um caso real quando o API Gateway receber uma requisição POST com o payload
 
 Resposta Scan
 
-```
-{
-  "status_code": 200,
-  "Message": "SUCCESS",
-  "Item": "[{\"nome_produto\": \"Café\", \"filial\": \"1001\", \"data_atulizacao_posicao_estoque\": \"2024-05-26 16:28:41\", \"qtd_estoque\": 1949.0, \"codigo_barra\": \"5140642011605\"}, {\"nome_produto\": \"Café\", \"filial\": \"1002\", \"data_atulizacao_posicao_estoque\": \"2024-05-26 16:28:46\", \"qtd_estoque\": 9278.0, \"codigo_barra\": \"5140642011605\"}, {\"nome_produto\": \"Barra de Cereal\", \"filial\": \"1001\", \"data_atulizacao_posicao_estoque\": \"2024-05-26 16:28:41\", \"qtd_estoque\": 7105.0, \"codigo_barra\": \"2733750189730\"}, {\"nome_produto\": \"Barra de Cereal\", \"filial\": \"1002\", \"data_atulizacao_posicao_estoque\": \"2024-05-26 16:28:46\", \"qtd_estoque\": 4639.0, \"codigo_barra\": \"2733750189730\"}, {\"nome_produto\": \"Laranja\", \"filial\": \"1001\", \"data_atulizacao_posicao_estoque\": \"2024-05-26 16:28:41\", \"qtd_estoque\": 6973.0, \"codigo_barra\": \"1140106125130\"}]"
-}
-```
-
 Resposta Query
 
 ```
 {
   "status_code": 200,
   "Message": "SUCCESS",
-  "Item": "{\"nome_produto\": \"Café\", \"filial\": \"1001\", \"data_atulizacao_posicao_estoque\": \"2024-05-26 16:28:41\", \"qtd_estoque\": 1949.0, \"codigo_barra\": \"5140642011605\"}"
+  "Item": {
+    "nome_produto": "Café",
+    "filial": "1001",
+    "data_atulizacao_posicao_estoque": "2024-05-27 21:16:31",
+    "qtd_estoque": 3011,
+    "codigo_barra": "5140642011605"
+  }
 }
 ```
+
+```
+{
+  "status_code": 200,
+  "Message": "SUCCESS",
+  "Itens": [
+    {
+      "nome_produto": "Café",
+      "filial": "1001",
+      "data_atulizacao_posicao_estoque": "2024-05-27 21:16:31",
+      "qtd_estoque": 3011,
+      "codigo_barra": "5140642011605"
+    },
+    {
+      "nome_produto": "Café",
+      "filial": "1002",
+      "data_atulizacao_posicao_estoque": "2024-05-27 21:16:36",
+      "qtd_estoque": 3361,
+      "codigo_barra": "5140642011605"
+    },
+    {
+      "nome_produto": "Barra de Cereal",
+      "filial": "1001",
+      "data_atulizacao_posicao_estoque": "2024-05-27 21:16:31",
+      "qtd_estoque": 1810,
+      "codigo_barra": "2733750189730"
+    },
+    {
+      "nome_produto": "Barra de Cereal",
+      "filial": "1002",
+      "data_atulizacao_posicao_estoque": "2024-05-27 21:16:36",
+      "qtd_estoque": 1420,
+      "codigo_barra": "2733750189730"
+    },
+    {
+      "nome_produto": "Laranja",
+      "filial": "1001",
+      "data_atulizacao_posicao_estoque": "2024-05-27 21:16:31",
+      "qtd_estoque": 2101,
+      "codigo_barra": "1140106125130"
+    }
+  ]
+}
+```
+
 
 ### Encerramento
 
